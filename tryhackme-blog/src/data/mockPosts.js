@@ -52,6 +52,36 @@ export const mockPosts = [
     categories: ['Misc'],
     imageUrl: 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?auto=format&fit=crop&q=80&w=400',
     bgColor: 'bg-gray-900/20'
+  },
+
+  {
+    id: 7,
+    title: 'TryHackMe: Extra Example Post',
+    excerpt: 'An extra placeholder post used for layout testing...',
+    date: '1 Thg 1, 2026',
+    categories: ['Misc'],
+    imageUrl: 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?auto=format&fit=crop&q=80&w=400',
+    bgColor: 'bg-gray-900/20'
+  },
+
+  {
+    id: 8,
+    title: 'TryHackMe: Extra Example Post',
+    excerpt: 'An extra placeholder post used for layout testing...',
+    date: '1 Thg 1, 2026',
+    categories: ['Misc'],
+    imageUrl: 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?auto=format&fit=crop&q=80&w=400',
+    bgColor: 'bg-gray-900/20'
+  },
+
+  {
+    id: 9,
+    title: 'TryHackMe: Extra Example Post',
+    excerpt: 'An extra placeholder post used for layout testing...',
+    date: '1 Thg 1, 2026',
+    categories: ['Misc'],
+    imageUrl: 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?auto=format&fit=crop&q=80&w=400',
+    bgColor: 'bg-gray-900/20'
   }
 ];
 

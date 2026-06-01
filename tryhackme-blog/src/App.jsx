@@ -56,6 +56,8 @@ export default function App() {
     { name: 'Giới thiệu', icon: <Info size={18} /> },
   ];
 
+  const avatarUrl = new URL('/avarta.jpg', import.meta.url).href;
+
   return (
     <div className={`min-h-screen flex justify-center ${darkMode ? 'bg-[#1a1a1a] text-gray-300' : 'bg-gray-50 text-gray-800'} font-sans transition-colors duration-300`}>
       <div className="max-w-[1400px] w-full flex flex-col md:flex-row">
@@ -66,7 +68,7 @@ export default function App() {
           <div className="flex flex-col items-center md:items-start mb-8 text-center md:text-left">
             <div className="w-24 h-24 rounded-full overflow-hidden mb-4 border-2 border-gray-700 ">
               <img 
-                src={avatarImg} 
+                src={avatarUrl} 
                 alt="Profile" 
                 className="w-full h-full object-cover "
               />
@@ -143,11 +145,11 @@ export default function App() {
                     ${darkMode ? 'bg-[#222222] border-gray-800 hover:border-gray-700' : 'bg-white border-gray-200 hover:border-gray-300'}`}
                 >
                   {/* Post Content */}
-                  <div className="flex-1 p-6 flex flex-col">
+                  <div className="flex-1 p-6 flex flex-col text-left">
                     <h3 className={`text-xl font-bold mb-3 leading-tight ${darkMode ? 'text-gray-100 hover:text-green-400' : 'text-gray-900 hover:text-green-600'} transition-colors`}>
                       {post.title}
                     </h3>
-                    <p className={`text-sm mb-6 flex-1 line-clamp-2 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                    <p className={`text-sm mb-6 line-clamp-2 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                       {post.excerpt}
                     </p>
                     
