@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import avatarImg from './assets/avarta.jpg';
 import { 
   Home, 
   FolderOpen, 
@@ -65,7 +66,7 @@ export default function App() {
           <div className="flex flex-col items-center md:items-start mb-8 text-center md:text-left">
             <div className="w-24 h-24 rounded-full overflow-hidden mb-4 border-2 border-gray-700 ">
               <img 
-                src="/avarta.jpg" 
+                src={avatarImg} 
                 alt="Profile" 
                 className="w-full h-full object-cover "
               />
