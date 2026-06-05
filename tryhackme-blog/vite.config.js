@@ -10,7 +10,7 @@ export default defineConfig({
     tailwindcss(),
     
   ],
-  base: '/CFT-Writeup/',  // 👈 Add this line (Make sure it matches your repo name exactly)
+  base: '/tryhackme-blog/',  // 👈 Make sure this matches your repo name
 
   
 })
