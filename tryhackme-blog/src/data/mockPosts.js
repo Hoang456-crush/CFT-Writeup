@@ -6,7 +6,8 @@ export const mockPosts = [
     date: '5 Thg 5, 2026',
     categories: ['TryHackMe', 'Walkthrough'],
     imageUrl: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&q=80&w=400',
-    bgColor: 'bg-green-900/20'
+    bgColor: 'bg-green-900/20',
+    path: 'tryhackme-lfi'
   },
   {
     id: 2,
@@ -15,7 +16,8 @@ export const mockPosts = [
     date: '3 Thg 5, 2026',
     categories: ['TryHackMe', 'Walkthrough'],
     imageUrl: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=400',
-    bgColor: 'bg-blue-900/20'
+    bgColor: 'bg-blue-900/20',
+    path: 'post-2'
   },
   {
     id: 3,
@@ -24,7 +26,8 @@ export const mockPosts = [
     date: '31 Thg 3, 2026',
     categories: ['TryHackMe', 'Walkthrough'],
     imageUrl: 'https://images.unsplash.com/photo-1563206767-5b18f218e8de?auto=format&fit=crop&q=80&w=400',
-    bgColor: 'bg-orange-900/20'
+    bgColor: 'bg-orange-900/20',
+    path: 'post-3'
   },
   {
     id: 4,
@@ -33,7 +36,8 @@ export const mockPosts = [
     date: '20 Thg 4, 2026',
     categories: ['TryHackMe', 'Writeup'],
     imageUrl: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=400',
-    bgColor: 'bg-purple-900/20'
+    bgColor: 'bg-purple-900/20',
+    path: 'post-4'
   },
   {
     id: 5,
@@ -42,7 +46,8 @@ export const mockPosts = [
     date: '12 Thg 2, 2026',
     categories: ['TryHackMe', 'Security'],
     imageUrl: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&q=80&w=400',
-    bgColor: 'bg-red-900/20'
+    bgColor: 'bg-red-900/20',
+    path: 'post-5'
   },
   {
     id: 6,
@@ -51,7 +56,8 @@ export const mockPosts = [
     date: '1 Thg 1, 2026',
     categories: ['Misc'],
     imageUrl: 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?auto=format&fit=crop&q=80&w=400',
-    bgColor: 'bg-gray-900/20'
+    bgColor: 'bg-gray-900/20',
+    path: 'post-6'
   },
 
   {
@@ -61,7 +67,8 @@ export const mockPosts = [
     date: '1 Thg 1, 2026',
     categories: ['Misc'],
     imageUrl: 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?auto=format&fit=crop&q=80&w=400',
-    bgColor: 'bg-gray-900/20'
+    bgColor: 'bg-gray-900/20',
+    path: 'post-7'
   },
 
   {
@@ -71,7 +78,8 @@ export const mockPosts = [
     date: '1 Thg 1, 2026',
     categories: ['Misc'],
     imageUrl: 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?auto=format&fit=crop&q=80&w=400',
-    bgColor: 'bg-gray-900/20'
+    bgColor: 'bg-gray-900/20',
+    path: 'post-8'
   },
 
   {
@@ -81,7 +89,8 @@ export const mockPosts = [
     date: '1 Thg 1, 2026',
     categories: ['Misc'],
     imageUrl: 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?auto=format&fit=crop&q=80&w=400',
-    bgColor: 'bg-gray-900/20'
+    bgColor: 'bg-gray-900/20',
+    path: 'post-9'
   }
 ];
 

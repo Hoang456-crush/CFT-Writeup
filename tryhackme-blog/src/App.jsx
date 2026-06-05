@@ -18,15 +18,22 @@ import {
 } from 'lucide-react';
 
 import { mockPosts, recentUpdates, trendingTags } from './data/mockPosts';
+import TryhackmeLFI from './pages/TryhackmeLFI.jsx';
+import PostDetail from './pages/PostDetail.jsx';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from './firebase';
 
 // --- COMPONENTS ---
 
 export default function App() {
   const [darkMode, setDarkMode] = useState(true);
+  const [page, setPage] = useState(null);
+  const [selectedPost, setSelectedPost] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeNav, setActiveNav] = useState('Trang chủ');
+  const [posts, setPosts] = useState(mockPosts);
 
-  const filteredPosts = mockPosts.filter(post => 
+  const filteredPosts = posts.filter(post => 
     post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     post.excerpt.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -45,6 +52,24 @@ export default function App() {
     // ensure current page is within range if filteredPosts shrinks
     if (currentPage > totalPages) setCurrentPage(totalPages);
   }, [totalPages]);
+
+  useEffect(() => {
+    async function loadPosts() {
+      if (!db) return;
+
+      try {
+        const postsCol = collection(db, 'posts');
+        const snapshot = await getDocs(postsCol);
+        if (!snapshot.empty) {
+          setPosts(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+        }
+      } catch (error) {
+        console.error('Failed to load posts from Firebase:', error);
+      }
+    }
+
+    loadPosts();
+  }, []);
 
   const displayedPosts = filteredPosts.slice((currentPage - 1) * postsPerPage, currentPage * postsPerPage);
 
@@ -115,105 +140,125 @@ export default function App() {
 
         {/* === MAIN CONTENT === */}
         <main className="flex-1 p-4 md:p-8 flex flex-col min-w-0">
-          {/* Header & Search */}
-          <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
-            <h2 className="text-sm text-gray-400 font-medium tracking-wider uppercase">Trang chủ</h2>
-            <div className="relative w-full sm:w-64">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Search size={16} className="text-gray-500" />
-              </div>
-              <input
-                type="text"
-                placeholder="Tìm kiếm..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className={`w-full pl-9 pr-3 py-1.5 rounded-full text-sm border focus:outline-none focus:ring-1 focus:ring-gray-500 transition-colors
-                  ${darkMode 
-                    ? 'bg-[#1a1a1a] border-gray-700 text-gray-200 placeholder-gray-500' 
-                    : 'bg-white border-gray-300 text-gray-800 placeholder-gray-400'}`}
-              />
+          {page === 'tryhackme-lfi' && (
+            <div className="w-full">
+              <TryhackmeLFI onClose={() => setPage(null)} darkMode={darkMode} />
             </div>
-          </header>
+          )}
 
-          {/* Posts List */}
-          <div className="space-y-6">
-            {filteredPosts.length > 0 ? (
-              displayedPosts.map((post) => (
-                <article 
-                  key={post.id} 
-                  className={`flex flex-col md:flex-row rounded-xl overflow-hidden border transition-all hover:shadow-lg hover:-translate-y-0.5 cursor-pointer
-                    ${darkMode ? 'bg-[#222222] border-gray-800 hover:border-gray-700' : 'bg-white border-gray-200 hover:border-gray-300'}`}
-                >
-                  {/* Post Content */}
-                  <div className="flex-1 p-6 flex flex-col text-left">
-                    <h3 className={`text-xl font-bold mb-3 leading-tight ${darkMode ? 'text-gray-100 hover:text-green-400' : 'text-gray-900 hover:text-green-600'} transition-colors`}>
-                      {post.title}
-                    </h3>
-                    <p className={`text-sm mb-6 line-clamp-2 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                      {post.excerpt}
-                    </p>
-                    
-                    {/* Post Meta */}
-                    <div className="flex items-center text-xs text-gray-500 space-x-6 mt-auto">
-                      <div className="flex items-center space-x-1.5">
-                        <Calendar size={14} />
-                        <span>{post.date}</span>
-                      </div>
-                      <div className="flex items-center space-x-1.5">
-                        <Folder size={14} />
-                        <span>{post.categories.join(', ')}</span>
-                      </div>
-                    </div>
+          {page === 'post' && selectedPost && (
+            <div className="w-full">
+              <PostDetail post={selectedPost} onClose={() => { setSelectedPost(null); setPage(null); }} darkMode={darkMode} />
+            </div>
+          )}
+
+          {page !== 'tryhackme-lfi' && page !== 'post' && (
+            <>
+              {/* Header & Search */}
+              <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+                <h2 className="text-sm text-gray-400 font-medium tracking-wider uppercase">Trang chủ</h2>
+                <div className="relative w-full sm:w-64">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Search size={16} className="text-gray-500" />
                   </div>
-                  
-                  {/* Post Image */}
-                  <div className={`w-full md:w-1/3 h-48 md:h-auto border-t md:border-t-0 md:border-l relative overflow-hidden ${darkMode ? 'border-gray-800' : 'border-gray-200'}`}>
-                    {/* Overlay pattern for visual interest (like the image) */}
-                    <div className={`absolute inset-0 ${post.bgColor} opacity-50 z-10 mix-blend-overlay`}></div>
-                    <img 
-                      src={post.imageUrl} 
-                      alt={post.title}
+                  <input
+                    type="text"
+                    placeholder="Tìm kiếm..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className={`w-full pl-9 pr-3 py-1.5 rounded-full text-sm border focus:outline-none focus:ring-1 focus:ring-gray-500 transition-colors
+                      ${darkMode 
+                        ? 'bg-[#1a1a1a] border-gray-700 text-gray-200 placeholder-gray-500' 
+                        : 'bg-white border-gray-300 text-gray-800 placeholder-gray-400'}`}
+                  />
+                </div>
+              </header>
+
+              {/* Posts List */}
+              <div className="space-y-6">
+                {filteredPosts.length > 0 ? (
+                  displayedPosts.map((post) => (
+                    <article 
+                      key={post.id} 
+                      onClick={() => {
+                        if (post.path === 'tryhackme-lfi') setPage('tryhackme-lfi');
+                        else { setSelectedPost(post); setPage('post'); }
+                      }}
+                      className={`flex flex-col md:flex-row rounded-xl overflow-hidden border transition-all hover:shadow-lg hover:-translate-y-0.5 cursor-pointer
+                        ${darkMode ? 'bg-[#222222] border-gray-800 hover:border-gray-700' : 'bg-white border-gray-200 hover:border-gray-300'}`}
+                    >
+                      {/* Post Content */}
+                      <div className="flex-1 p-6 flex flex-col text-left">
+                        <h3 className={`text-xl font-bold mb-3 leading-tight ${darkMode ? 'text-gray-100 hover:text-green-400' : 'text-gray-900 hover:text-green-600'} transition-colors`}>
+                          {post.title}
+                        </h3>
+                        <p className={`text-sm mb-6 line-clamp-2 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                          {post.excerpt}
+                        </p>
+                        
+                        {/* Post Meta */}
+                        <div className="flex items-center text-xs text-gray-500 space-x-6 mt-auto">
+                          <div className="flex items-center space-x-1.5">
+                            <Calendar size={14} />
+                            <span>{post.date}</span>
+                          </div>
+                          <div className="flex items-center space-x-1.5">
+                            <Folder size={14} />
+                            <span>{post.categories.join(', ')}</span>
+                          </div>
+                        </div>
+                      </div>
                       
-                    />
+                      {/* Post Image */}
+                      <div className={`w-full md:w-1/3 h-48 md:h-auto border-t md:border-t-0 md:border-l relative overflow-hidden ${darkMode ? 'border-gray-800' : 'border-gray-200'}`}>
+                        {/* Overlay pattern for visual interest (like the image) */}
+                        <div className={`absolute inset-0 ${post.bgColor} opacity-50 z-10 mix-blend-overlay`}></div>
+                        <img 
+                          src={post.imageUrl} 
+                          alt={post.title}
+                        />
+
+                      </div>
+                    </article>
+                  ))
+                ) : (
+                  <div className="text-center py-10 text-gray-500">
+                    Không tìm thấy bài viết nào phù hợp.
                   </div>
-                </article>
-              ))
-            ) : (
-              <div className="text-center py-10 text-gray-500">
-                Không tìm thấy bài viết nào phù hợp.
+                )}
               </div>
-            )}
-          </div>
 
-          {/* Pagination Controls */}
-          {totalPages > 1 && (
-            <div className="flex items-center justify-center space-x-2 mt-6">
-              <button
-                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                className={`px-3 py-1 rounded-md text-sm font-medium ${darkMode ? 'bg-[#222] text-gray-300 hover:bg-[#2a2a2a]' : 'bg-white text-gray-700 hover:bg-gray-100'} border`}
-                disabled={currentPage === 1}
-              >
-                Prev
-              </button>
+              {/* Pagination Controls */}
+              {totalPages > 1 && (
+                <div className="flex items-center justify-center space-x-2 mt-6">
+                  <button
+                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                    className={`px-3 py-1 rounded-md text-sm font-medium ${darkMode ? 'bg-[#222] text-gray-300 hover:bg-[#2a2a2a]' : 'bg-white text-gray-700 hover:bg-gray-100'} border`}
+                    disabled={currentPage === 1}
+                  >
+                    Prev
+                  </button>
 
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                <button
-                  key={page}
-                  onClick={() => setCurrentPage(page)}
-                  className={`px-3 py-1 rounded-md text-sm font-medium border ${currentPage === page ? (darkMode ? 'bg-green-800 text-white' : 'bg-green-200 text-gray-900') : (darkMode ? 'bg-[#1a1a1a] text-gray-300 hover:bg-[#252525]' : 'bg-white text-gray-700 hover:bg-gray-100')}`}
-                >
-                  {page}
-                </button>
-              ))}
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                    <button
+                      key={page}
+                      onClick={() => setCurrentPage(page)}
+                      className={`px-3 py-1 rounded-md text-sm font-medium border ${currentPage === page ? (darkMode ? 'bg-green-800 text-white' : 'bg-green-200 text-gray-900') : (darkMode ? 'bg-[#1a1a1a] text-gray-300 hover:bg-[#252525]' : 'bg-white text-gray-700 hover:bg-gray-100')}`}
+                    >
+                      {page}
+                    </button>
+                  ))}
 
-              <button
-                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                className={`px-3 py-1 rounded-md text-sm font-medium ${darkMode ? 'bg-[#222] text-gray-300 hover:bg-[#2a2a2a]' : 'bg-white text-gray-700 hover:bg-gray-100'} border`}
-                disabled={currentPage === totalPages}
-              >
-                Next
-              </button>
-            </div>
+                  <button
+                    onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                    className={`px-3 py-1 rounded-md text-sm font-medium ${darkMode ? 'bg-[#222] text-gray-300 hover:bg-[#2a2a2a]' : 'bg-white text-gray-700 hover:bg-gray-100'} border`}
+                    disabled={currentPage === totalPages}
+                  >
+                    Next
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </main>
 
